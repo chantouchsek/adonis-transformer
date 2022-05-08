@@ -86,7 +86,7 @@ export default class Scope {
       }
     } else {
       // If we are here, we have some unknown resource and can not transform it
-      throw new Error('This resourcetype is not supported. Use Item or Collection')
+      throw new Error('This resource type is not supported. Use Item or Collection')
     }
 
     return [transformedData, includedData]
@@ -167,7 +167,7 @@ export default class Scope {
     // if the provided transformer name does not start with the App namespace
     // we assume we need to add the prefix to the name
     if (!transformer.startsWith('App')) {
-      const Config = new Ioc().use('Adonis/Src/Config')
+      const Config = new Ioc().use('Adonis/Core/Config')
       const namespace = _trimEnd(Config.get('bumblebee.namespace', 'App/Transformers'), '/')
 
       prefix = `${namespace}/`

@@ -159,7 +159,7 @@ class Scope {
         // if the provided transformer name does not start with the App namespace
         // we assume we need to add the prefix to the name
         if (!transformer.startsWith('App')) {
-            const Config = new fold_1.Ioc().use('Adonis/Src/Config');
+            const Config = new fold_1.Ioc().use('Adonis/Core/Config');
             const namespace = (0, trimEnd_1.default)(Config.get('bumblebee.namespace', 'App/Transformers'), '/');
             prefix = `${namespace}/`;
         }
