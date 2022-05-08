@@ -1,9 +1,11 @@
-import { Ioc } from '@adonisjs/fold'
+// import { Ioc } from '@adonisjs/fold'
 import _camelCase from 'lodash/camelCase'
 import Scope from './Scope'
 import Serializers from './Serializers'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { ConfigContract } from '@ioc:Adonis/Core/Config'
+// import { ConfigContract } from '@ioc:Adonis/Core/Config'
+
+// const ioc = new Ioc()
 
 export default class Manager {
   public serializer: null
@@ -104,18 +106,19 @@ export default class Manager {
   }
 
   public _setIncludesFromRequest (ctx: HttpContextContract) {
-    const Config: ConfigContract = new Ioc().use('Adonis/Core/Config')
-
-    // Only parse includes if enabled in config
-    if (!Config.get('bumblebee.parseRequest', false)) {
-      return
-    }
+    // const Config: ConfigContract = ioc.use('Adonis/Core/Config')
+    //
+    // // Only parse includes if enabled in config
+    // if (!Config.get('bumblebee.parseRequest', false)) {
+    //   return
+    // }
 
     // get all get parameters from the request
-    const params = (ctx && ctx.request.all()) || {}
+    const params = (ctx.request && ctx.request.all()) || {}
 
     // if the 'include' parameter is set, pass it the the parse method
     if (params.include) {
+      console.warn('param', params)
       this.parseIncludes(params.include)
     }
   }

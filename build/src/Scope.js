@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fold_1 = require("@adonisjs/fold");
+// import { Ioc } from '@adonisjs/fold'
 const trimEnd_1 = __importDefault(require("lodash/trimEnd"));
 const TransformerAbstract_1 = __importDefault(require("./TransformerAbstract"));
 const Resources_1 = __importDefault(require("./Resources"));
@@ -60,7 +60,7 @@ class Scope {
         // If any meta data has been added, add it to the response
         if (Object.keys(meta).length !== 0) {
             // If the serializer does not support meta data,
-            // we just force the data object under a 'data' propert since we can not mix an array with objects
+            // we just force the data object under a 'data' property since we can not mix an array with objects
             if (Array.isArray(data) || (typeof data !== 'object' && data !== null)) {
                 data = { data: data };
             }
@@ -159,8 +159,9 @@ class Scope {
         // if the provided transformer name does not start with the App namespace
         // we assume we need to add the prefix to the name
         if (!transformer.startsWith('App')) {
-            const Config = new fold_1.Ioc().use('Adonis/Core/Config');
-            const namespace = (0, trimEnd_1.default)(Config.get('bumblebee.namespace', 'App/Transformers'), '/');
+            // const Config = new Ioc().use('Adonis/Src/Config')
+            // const namespace = _trimEnd(Config.get('bumblebee.namespace', 'App/Transformers'), '/')
+            const namespace = (0, trimEnd_1.default)('App/Transformers', '/');
             prefix = `${namespace}/`;
         }
         // try to load the transformer using the ioc container
