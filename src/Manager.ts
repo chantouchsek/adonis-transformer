@@ -112,13 +112,15 @@ export default class Manager {
     // if (!Config.get('bumblebee.parseRequest', false)) {
     //   return
     // }
+    if (!ctx) {
+      return
+    }
 
     // get all get parameters from the request
     const params = (ctx.request && ctx.request.all()) || {}
 
     // if the 'include' parameter is set, pass it the the parse method
     if (params.include) {
-      console.warn('param', params)
       this.parseIncludes(params.include)
     }
   }
