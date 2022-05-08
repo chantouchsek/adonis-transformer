@@ -11,7 +11,7 @@ class AppProvider {
     }
     register() {
         // Register your own bindings
-        this.app.container.singleton('Adonis/Addons/src', () => ({
+        this.app.container.singleton('Adonis/Addons/Transformer', () => ({
             TransformerAbstract: TransformerAbstract_1.default,
             Transformer: src_1.default,
         }));

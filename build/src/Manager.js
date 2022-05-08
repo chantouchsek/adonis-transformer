@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const { ioc } = require('@adonisjs/fold');
+const fold_1 = require("@adonisjs/fold");
 const camelCase_1 = __importDefault(require("lodash/camelCase"));
 const Scope_1 = __importDefault(require("./Scope"));
 const Serializers_1 = __importDefault(require("./Serializers"));
@@ -80,7 +80,7 @@ class Manager {
         parsed.forEach(this.requestedIncludes.add, this.requestedIncludes);
     }
     _setIncludesFromRequest(ctx) {
-        const Config = ioc.use('Adonis/Core/Config');
+        const Config = new fold_1.Ioc().use('Adonis/Core/Config');
         // Only parse includes if enabled in config
         if (!Config.get('bumblebee.parseRequest', false)) {
             return;

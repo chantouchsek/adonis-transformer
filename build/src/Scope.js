@@ -96,7 +96,7 @@ class Scope {
         }
         else {
             // If we are here, we have some unknown resource and can not transform it
-            throw new Error('This resourcetype is not supported. Use Item or Collection');
+            throw new Error('This resource type is not supported. Use Item or Collection');
         }
         return [transformedData, includedData];
     }
