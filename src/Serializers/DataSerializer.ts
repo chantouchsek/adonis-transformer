@@ -1,14 +1,14 @@
 import SerializerAbstract from './SerializerAbstract'
 
 export default class DataSerializer extends SerializerAbstract {
-  public async collection (data: Record<string, any>) {
-    return { data }
+  public async collection (data): Promise<any> {
+    return { data: data }
   }
 
-  public async item (data: Record<string, any>) {
+  public async item (data) {
     // if the item is an object, add it to the data property
     if (data instanceof Object) {
-      return { data }
+      return { data: data }
     }
 
     // If the data for this item is not a object, aka. a primitive type
@@ -20,11 +20,11 @@ export default class DataSerializer extends SerializerAbstract {
     return null
   }
 
-  public async meta (meta: Record<string, any>) {
-    return { meta }
+  public async meta (meta) {
+    return { meta: meta }
   }
 
-  public async paginator (pagination: Record<string, any>) {
-    return { pagination }
+  public async paginator (pagination) {
+    return { pagination: pagination }
   }
 }

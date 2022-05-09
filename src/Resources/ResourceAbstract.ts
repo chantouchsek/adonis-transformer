@@ -1,13 +1,13 @@
 export default class ResourceAbstract {
-  public data: Record<string, any> | null
-  public meta: Record<string, any>
+  public data: any
+  public meta: null
   public transformer: any | string
   public variant: null | string
-  public pagination: Record<string, any>
+  public pagination: any
 
-  constructor (data: Record<string, any> | null, trans) {
+  constructor (data, trans) {
     this.data = data
-    this.meta = {}
+    this.meta = null
 
     const { transformer, variant } = this._separateTransformerAndVariation(trans)
 
@@ -15,7 +15,7 @@ export default class ResourceAbstract {
     this.variant = variant
   }
 
-  public async getData (): Promise<Record<string, any> | null> {
+  public async getData (): Promise<any> {
     // data can be a promise, so we wait until it resolves
     const data = await this.data
 
@@ -32,7 +32,7 @@ export default class ResourceAbstract {
     return this.transformer
   }
 
-  public setMeta (meta: Record<string, any>) {
+  public setMeta (meta) {
     this.meta = meta
 
     return this
@@ -42,7 +42,7 @@ export default class ResourceAbstract {
     return this.meta
   }
 
-  public setPagination (pagination: Record<string, any>) {
+  public setPagination (pagination) {
     this.pagination = pagination
 
     return this
@@ -52,7 +52,7 @@ export default class ResourceAbstract {
     return this.pagination
   }
 
-  public setVariant (variant: string | null) {
+  public setVariant (variant) {
     if (variant) {
       this.variant = variant
     }
