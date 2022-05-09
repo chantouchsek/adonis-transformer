@@ -1,11 +1,11 @@
 import SerializerAbstract from './SerializerAbstract'
 
 export default class PlainSerializer extends SerializerAbstract {
-  public async collection (data) {
+  public async collection (data: Record<string, any>) {
     return data
   }
 
-  public async item (data) {
+  public async item (data: Record<string, any>) {
     return data
   }
 
@@ -13,11 +13,11 @@ export default class PlainSerializer extends SerializerAbstract {
     return null
   }
 
-  public async meta (meta) {
-    return { meta: meta }
+  public async meta (meta: Record<string, any>) {
+    return { meta }
   }
 
-  public async paginator (pagination) {
-    return { pagination: pagination }
+  public async paginator (pagination: Record<string, any>) {
+    return { pagination }
   }
 }

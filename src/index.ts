@@ -1,42 +1,44 @@
 import Manager from './Manager'
 import Resources from './Resources'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
+type DataType = 'Collection' | 'Item' | 'Null'
 
 export default class Transformer {
-  public _data: any
-  public _dataType: string
-  public _transformer: any
-  public _variant: null
-  public _pagination: null
+  public _data: Record<string, any>
+  public _dataType: DataType
+  public _transformer: Transformer
+  public _variant: string | null
+  public _pagination: Record<string, any>
   public _context: null
-  public _manager: any
-  public _meta: any
-  public _ctx: any
+  public _manager: Manager
+  public _meta: Record<string, any>
+  public _ctx: HttpContextContract
 
-  public static create (data = null, transformer = null) {
+  public static create (data = null, transformer: Transformer = null as unknown as Transformer) {
     // create an instance of src and pass a new instance of Manager
     const instance = new Transformer(new Manager())
 
     // initialize data and transformer properties
-    instance._data = data
+    instance._data = data as unknown as Record<string, any>
     instance._dataType = instance._determineDataType(data)
     instance._transformer = transformer
     instance._variant = null
 
     // set pagination, context and meta properties to null
-    instance._pagination = null
+    instance._pagination = {}
     instance._context = null
-    instance._meta = null
+    instance._meta = {}
 
     // return the instance for the fluid interface
     return instance
   }
 
-  constructor (manager) {
+  constructor (manager: Manager) {
     this._manager = manager
-    return this
   }
 
-  public collection (data, transformer = null) {
+  public collection (data: Record<string, any>[], transformer: Transformer = null as unknown as Transformer) {
     this._setData('Collection', data)
 
     if (transformer) {
@@ -47,7 +49,7 @@ export default class Transformer {
     return this
   }
 
-  public item (data, transformer = null) {
+  public item (data, transformer: Transformer = null as unknown as Transformer) {
     this._setData('Item', data)
 
     if (transformer) {
@@ -64,7 +66,7 @@ export default class Transformer {
     return this
   }
 
-  public paginate (data, transformer = null) {
+  public paginate (data, transformer: Transformer = null as unknown as Transformer) {
     this._setData('Collection', data.rows)
 
     // set pagination data
@@ -127,10 +129,10 @@ export default class Transformer {
     return this._createData().toJSON()
   }
 
-  public _setData (dataType, data) {
+  public _setData (dataType: DataType, data) {
     this._data = data
     this._dataType = dataType
-    this._pagination = null
+    this._pagination = {}
 
     return this
   }

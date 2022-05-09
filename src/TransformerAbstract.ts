@@ -1,16 +1,16 @@
 import Resources from './Resources'
 import _camelCase from 'lodash/camelCase'
-import Scope from'./Scope'
+import Scope from './Scope'
 
 export default class TransformerAbstract {
   public availableInclude: string[] = []
   public defaultInclude: string[] = []
 
-  public transform (_data: any) {
+  public transform (_: any) {
     throw new Error('You have to implement the method transform or specify a variant when calling the transformer!')
   }
 
-  public collection (data, transformer) {
+  public collection (data: Record<string, any>[], transformer) {
     return new Resources.Collection(data, transformer)
   }
 

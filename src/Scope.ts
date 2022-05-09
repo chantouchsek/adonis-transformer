@@ -3,15 +3,17 @@ import _trimEnd from 'lodash/trimEnd'
 
 import TransformerAbstract from './TransformerAbstract'
 import Resources from './Resources'
+import Manager from './Manager'
+import SerializerAbstract from './Serializers/SerializerAbstract'
 
 export default class Scope {
-  public _manager: any
+  public _manager: Manager
   public _resource: any
   public _ctx: any
   public _scopeIdentifier: any
   public _parentScopes: any[]
 
-  constructor (manager, resource, ctx, scopeIdentifier = null) {
+  constructor (manager: Manager, resource: any, ctx: any, scopeIdentifier = null) {
     this._manager = manager
     this._resource = resource
     this._ctx = ctx
@@ -49,7 +51,7 @@ export default class Scope {
       // If the serializer does not support meta data,
       // we just force the data object under a 'data' property since we can not mix an array with objects
       if (Array.isArray(data) || (typeof data !== 'object' && data !== null)) {
-        data = { data: data }
+        data = {data: data}
       }
 
       // merge data with meta data
@@ -92,10 +94,10 @@ export default class Scope {
     return [transformedData, includedData]
   }
 
-  public async _fireTransformer (data, transformer) {
+  public async _fireTransformer (data: any, transformer: TransformerAbstract) {
     let includedData = []
 
-    // get a transformer instance and tranform data
+    // get a transformer instance and transform data
     const transformerInstance = this._getTransformerInstance(transformer)
     let transformedData = await this._dispatchToTransformerVariant(transformerInstance, await data, this._ctx)
 
@@ -109,7 +111,7 @@ export default class Scope {
     return [transformedData, includedData]
   }
 
-  public async _serializeResource (serializer, rawData) {
+  public async _serializeResource (serializer: SerializerAbstract, rawData: any) {
     const scopeDepth = this.getScopeArray().length
 
     if (this._resource instanceof Resources.Collection) {
@@ -123,7 +125,7 @@ export default class Scope {
     return serializer.null(scopeDepth)
   }
 
-  public _isRequested (checkScopeSegment) {
+  public _isRequested (checkScopeSegment: any) {
     // create the include string by combining current level with parent levels
     const scopeString = [...this.getScopeArray(), checkScopeSegment].join('.')
 
@@ -134,26 +136,27 @@ export default class Scope {
       this._manager.getRequestedIncludes(true).has(scopeString)
   }
 
-  public _getTransformerInstance (Transformer) {
+  public _getTransformerInstance (transformer: any) {
     // if the transformer is a string, use the IoC to fetch the instance.
-    if (typeof Transformer === 'string') {
-      Transformer = this._resolveTransformer(Transformer)
+    if (typeof transformer === 'string') {
+      transformer = this._resolveTransformer(transformer)
     }
 
     // if the transformer is a class, create a new instance
-    if (Transformer && Transformer.prototype instanceof TransformerAbstract) {
-      return new Transformer()
+    if (transformer && transformer.prototype instanceof TransformerAbstract) {
+      return new transformer()
     }
 
-    if (typeof Transformer === 'function') {
+    if (typeof transformer === 'function') {
       // if a closure was passed, we create an anonymous transformer class
       // with the passed closure as transform method
       class ClosureTransformer extends TransformerAbstract {
         public transform (data: any): object {
-          return Transformer(data)
+          return transformer(data)
         }
       }
-      (<any>ClosureTransformer).transform = Transformer
+
+      (<any>ClosureTransformer).transform = transformer
 
       return new ClosureTransformer()
     }
@@ -161,7 +164,7 @@ export default class Scope {
     throw new Error('A transformer must be a function or a class extending TransformerAbstract')
   }
 
-  public _resolveTransformer (transformer) {
+  public _resolveTransformer (transformer: string) {
     let prefix = ''
 
     // if the provided transformer name does not start with the App namespace
@@ -178,7 +181,7 @@ export default class Scope {
     return import(`${prefix}${transformer}`)
   }
 
-  public async _dispatchToTransformerVariant (transformerInstance, data, ctx) {
+  public async _dispatchToTransformerVariant (transformerInstance: any, data: any, ctx: any) {
     const variant = this._resource.getVariant()
 
     //  if a variant was defined, we construct the name for the transform mehod
@@ -197,14 +200,14 @@ export default class Scope {
     return transformerInstance[transformMethodName](data, ctx || this._ctx)
   }
 
-  public _transformerHasIncludes (Transformer) {
-    const defaultInclude = Transformer.defaultInclude
-    const availableInclude = Transformer.availableInclude
+  public _transformerHasIncludes (transformer: TransformerAbstract) {
+    const defaultInclude = transformer.defaultInclude
+    const availableInclude = transformer.availableInclude
 
     return defaultInclude.length > 0 || availableInclude.length > 0
   }
 
-  public setParentScopes (parentScopes) {
+  public setParentScopes (parentScopes: any[]) {
     this._parentScopes = parentScopes
   }
 
